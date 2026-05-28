@@ -1,0 +1,288 @@
+@use '@angular/material' as mat;
+
+// =============================================
+// MployCheck — Premium Dark Theme Design System
+// =============================================
+
+// -- Design Tokens --
+:root {
+  // Core palette
+  --mc-bg-primary: #0a0e1a;
+  --mc-bg-secondary: #111827;
+  --mc-bg-card: #1a2035;
+  --mc-bg-card-hover: #1f2847;
+  --mc-bg-elevated: #222b45;
+  --mc-bg-input: #151c2e;
+  --mc-bg-overlay: rgba(0, 0, 0, 0.6);
+
+  // Accent colors
+  --mc-accent-primary: #6366f1;
+  --mc-accent-primary-hover: #818cf8;
+  --mc-accent-secondary: #8b5cf6;
+  --mc-accent-success: #10b981;
+  --mc-accent-warning: #f59e0b;
+  --mc-accent-danger: #ef4444;
+  --mc-accent-info: #3b82f6;
+
+  // Gradients
+  --mc-gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+  --mc-gradient-accent: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  --mc-gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  --mc-gradient-danger: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  --mc-gradient-card: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.04) 100%);
+
+  // Text
+  --mc-text-primary: #f1f5f9;
+  --mc-text-secondary: #94a3b8;
+  --mc-text-muted: #64748b;
+  --mc-text-accent: #a78bfa;
+
+  // Borders
+  --mc-border: rgba(99, 102, 241, 0.15);
+  --mc-border-hover: rgba(99, 102, 241, 0.35);
+  --mc-border-active: rgba(99, 102, 241, 0.6);
+
+  // Shadows
+  --mc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --mc-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --mc-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --mc-shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+  --mc-shadow-glow-strong: 0 0 40px rgba(99, 102, 241, 0.25);
+
+  // Radius
+  --mc-radius-sm: 8px;
+  --mc-radius-md: 12px;
+  --mc-radius-lg: 16px;
+  --mc-radius-xl: 24px;
+  --mc-radius-full: 9999px;
+
+  // Transitions
+  --mc-transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --mc-transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --mc-transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Sidebar
+  --mc-sidebar-width: 280px;
+  --mc-sidebar-collapsed-width: 72px;
+
+  // Font
+  --mc-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+// -- Angular Material Theme --
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$violet-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Inter,
+      density: 0,
+    )
+  );
+
+  // Always dark
+  color-scheme: dark;
+
+  &.dark-theme {
+    color-scheme: dark;
+  }
+  &.light-theme {
+    color-scheme: dark; // keep dark always
+  }
+}
+
+body {
+  font-family: var(--mc-font-family);
+  background-color: var(--mc-bg-primary);
+  color: var(--mc-text-primary);
+  margin: 0;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+// -- Scrollbar Styling --
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 3px;
+  &:hover {
+    background: rgba(99, 102, 241, 0.5);
+  }
+}
+
+// -- Angular Material Overrides for Dark Theme --
+
+// Mat Card
+.mat-mdc-card {
+  background: var(--mc-bg-card) !important;
+  border: 1px solid var(--mc-border) !important;
+  border-radius: var(--mc-radius-lg) !important;
+  box-shadow: var(--mc-shadow-md) !important;
+  color: var(--mc-text-primary) !important;
+}
+
+// Mat Form Field
+.mat-mdc-form-field {
+  .mdc-text-field--filled {
+    background-color: var(--mc-bg-input) !important;
+    border-radius: var(--mc-radius-sm) var(--mc-radius-sm) 0 0 !important;
+  }
+  .mat-mdc-form-field-focus-overlay {
+    background-color: rgba(99, 102, 241, 0.05) !important;
+  }
+  .mdc-floating-label {
+    color: var(--mc-text-secondary) !important;
+  }
+  .mat-mdc-input-element {
+    color: var(--mc-text-primary) !important;
+    caret-color: var(--mc-accent-primary) !important;
+  }
+}
+
+// Mat Table
+.mat-mdc-table {
+  background: transparent !important;
+
+  .mat-mdc-header-cell {
+    color: var(--mc-text-secondary) !important;
+    border-bottom-color: var(--mc-border) !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .mat-mdc-cell {
+    color: var(--mc-text-primary) !important;
+    border-bottom-color: rgba(99, 102, 241, 0.08) !important;
+  }
+
+  .mat-mdc-row {
+    transition: background-color var(--mc-transition-fast);
+    &:hover {
+      background-color: var(--mc-bg-card-hover) !important;
+    }
+  }
+}
+
+// Mat Toolbar
+.mat-toolbar {
+  background: var(--mc-bg-secondary) !important;
+  color: var(--mc-text-primary) !important;
+  border-bottom: 1px solid var(--mc-border) !important;
+}
+
+// Mat Button
+.mat-mdc-raised-button.mat-primary {
+  background: var(--mc-gradient-primary) !important;
+  color: white !important;
+  border-radius: var(--mc-radius-sm) !important;
+  box-shadow: var(--mc-shadow-glow) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.025em !important;
+  transition: all var(--mc-transition-normal) !important;
+  &:hover {
+    box-shadow: var(--mc-shadow-glow-strong) !important;
+    transform: translateY(-1px);
+  }
+}
+
+// Mat Snackbar
+.mat-mdc-snack-bar-container {
+  .mdc-snackbar__surface {
+    background-color: var(--mc-bg-elevated) !important;
+    border: 1px solid var(--mc-border) !important;
+    border-radius: var(--mc-radius-md) !important;
+  }
+}
+
+// Mat Progress Spinner
+.mat-mdc-progress-spinner circle {
+  stroke: var(--mc-accent-primary) !important;
+}
+
+// Mat Select
+.mat-mdc-select-panel {
+  background: var(--mc-bg-card) !important;
+  border: 1px solid var(--mc-border) !important;
+  border-radius: var(--mc-radius-sm) !important;
+}
+
+.mat-mdc-option {
+  color: var(--mc-text-primary) !important;
+  &:hover {
+    background-color: var(--mc-bg-card-hover) !important;
+  }
+  &.mdc-list-item--selected {
+    background-color: rgba(99, 102, 241, 0.15) !important;
+  }
+}
+
+// Mat Dialog
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--mc-bg-card) !important;
+  border: 1px solid var(--mc-border) !important;
+  border-radius: var(--mc-radius-lg) !important;
+}
+
+// Mat Icon
+.mat-icon {
+  color: var(--mc-text-secondary);
+}
+
+// -- Utility Classes --
+.spacer {
+  flex: 1 1 auto;
+}
+
+// -- Animations --
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}

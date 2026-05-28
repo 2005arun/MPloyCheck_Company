@@ -1,0 +1,223 @@
+<div class="dashboard-layout" [class.sidebar-collapsed]="sidebarCollapsed()">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <mat-icon>verified_user</mat-icon>
+        </div>
+        <span class="brand-text" *ngIf="!sidebarCollapsed()">MployCheck</span>
+      </div>
+      <button class="sidebar-toggle" (click)="toggleSidebar()" id="sidebar-toggle-btn">
+        <mat-icon>{{ sidebarCollapsed() ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" id="nav-dashboard">
+        <mat-icon>dashboard</mat-icon>
+        <span class="nav-label" *ngIf="!sidebarCollapsed()">Dashboard</span>
+      </a>
+      <a class="nav-item" *ngIf="currentUser?.role === 'admin'" (click)="goToAdmin()" id="nav-admin">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span class="nav-label" *ngIf="!sidebarCollapsed()">Manage Users</span>
+      </a>
+      <a class="nav-item" id="nav-profile">
+        <mat-icon>person</mat-icon>
+        <span class="nav-label" *ngIf="!sidebarCollapsed()">My Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info" *ngIf="!sidebarCollapsed()">
+        <div class="user-avatar">
+          {{ currentUser?.username?.charAt(0)?.toUpperCase() }}
+        </div>
+        <div class="user-details">
+          <span class="user-name">{{ currentUser?.username }}</span>
+          <span class="user-role">{{ currentUser?.role === 'admin' ? 'Admin User' : 'General User' }}</span>
+        </div>
+      </div>
+      <button class="nav-item logout-item" (click)="logout()" id="logout-btn">
+        <mat-icon>logout</mat-icon>
+        <span class="nav-label" *ngIf="!sidebarCollapsed()">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <h1 class="page-title">Dashboard</h1>
+        <span class="page-subtitle">Welcome back, {{ currentUser?.username }}!</span>
+      </div>
+      <div class="top-bar-right">
+        <button class="icon-btn" (click)="loadData()" matTooltip="Refresh Data" id="refresh-btn">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button class="icon-btn" (click)="toggleTheme()" matTooltip="Toggle Theme" id="theme-toggle-btn">
+          <mat-icon>{{ (darkMode$ | async) ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Stats Grid -->
+      <div class="stats-grid" *ngIf="currentUser?.role === 'admin'">
+        <div class="stat-card stat-primary">
+          <div class="stat-icon">
+            <mat-icon>groups</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().totalUsers }}</span>
+            <span class="stat-label">Total Users</span>
+          </div>
+        </div>
+        <div class="stat-card stat-success">
+          <div class="stat-icon">
+            <mat-icon>admin_panel_settings</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().adminCount }}</span>
+            <span class="stat-label">Admin Users</span>
+          </div>
+        </div>
+        <div class="stat-card stat-info">
+          <div class="stat-icon">
+            <mat-icon>people</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().userCount }}</span>
+            <span class="stat-label">General Users</span>
+          </div>
+        </div>
+        <div class="stat-card stat-warning">
+          <div class="stat-icon">
+            <mat-icon>business</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().departmentCount }}</span>
+            <span class="stat-label">Departments</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Card -->
+      <div class="profile-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <mat-icon>person</mat-icon>
+            Your Profile
+          </h2>
+        </div>
+        <div class="profile-card-content">
+          <div class="profile-avatar-large">
+            {{ currentUser?.username?.charAt(0)?.toUpperCase() }}
+          </div>
+          <div class="profile-details-grid">
+            <div class="profile-field">
+              <span class="field-label">Name</span>
+              <span class="field-value">{{ currentUser?.username }}</span>
+            </div>
+            <div class="profile-field">
+              <span class="field-label">Role</span>
+              <span class="field-value">
+                <span class="role-badge" [class]="getRoleBadgeClass(currentUser?.role || '')">
+                  {{ currentUser?.role === 'admin' ? 'Admin User' : 'General User' }}
+                </span>
+              </span>
+            </div>
+            <div class="profile-field">
+              <span class="field-label">Department</span>
+              <span class="field-value">{{ currentUser?.department || 'N/A' }}</span>
+            </div>
+            <div class="profile-field">
+              <span class="field-label">Access Level</span>
+              <span class="field-value">
+                <span class="access-badge" [class]="getAccessBadgeClass(currentUser?.accessLevel)">
+                  {{ currentUser?.accessLevel || 'Read' }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <div class="table-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <mat-icon>{{ currentUser?.role === 'admin' ? 'groups' : 'assignment_ind' }}</mat-icon>
+            {{ currentUser?.role === 'admin' ? 'All Users' : 'My Records' }}
+          </h2>
+          <div class="section-actions">
+            <span class="record-count">{{ users.length }} record(s)</span>
+            <button class="icon-btn-sm" (click)="loadData()" matTooltip="Reload with 3s delay" id="reload-users-btn">
+              <mat-icon>sync</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="dataLoading()" class="table-loading">
+          <div class="loading-skeleton">
+            <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]">
+              <div class="skeleton-cell skeleton-animate"></div>
+              <div class="skeleton-cell skeleton-animate"></div>
+              <div class="skeleton-cell skeleton-animate"></div>
+              <div class="skeleton-cell skeleton-animate"></div>
+            </div>
+          </div>
+          <div class="loading-message">
+            <div class="mini-spinner"></div>
+            <span>Fetching data from server (3s async delay)...</span>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper" *ngIf="!dataLoading()">
+          <table mat-table [dataSource]="users" class="premium-table" id="users-table">
+            <ng-container matColumnDef="username">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="cell-with-avatar">
+                  <div class="mini-avatar">{{ element.username?.charAt(0)?.toUpperCase() }}</div>
+                  <span>{{ element.username }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="role">
+              <th mat-header-cell *matHeaderCellDef>Role</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="role-badge" [class]="getRoleBadgeClass(element.role)">
+                  {{ element.role === 'admin' ? 'Admin User' : 'General User' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="department">
+              <th mat-header-cell *matHeaderCellDef>Department</th>
+              <td mat-cell *matCellDef="let element">{{ element.department || 'N/A' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="accessLevel">
+              <th mat-header-cell *matHeaderCellDef>Access</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="access-badge" [class]="getAccessBadgeClass(element.accessLevel)">
+                  {{ element.accessLevel || 'Read' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row-animate"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

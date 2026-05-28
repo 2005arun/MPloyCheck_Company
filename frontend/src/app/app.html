@@ -1,0 +1,11 @@
+<router-outlet></router-outlet>
+
+<!-- Global Loading Overlay -->
+<div *ngIf="loading$ | async" class="global-spinner-overlay">
+  <div class="spinner-wrapper">
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring spinner-ring-2"></div>
+    <div class="spinner-ring spinner-ring-3"></div>
+    <span class="spinner-text">Loading...</span>
+  </div>
+</div>

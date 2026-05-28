@@ -1,0 +1,96 @@
+<div class="login-page">
+  <!-- Animated Background -->
+  <div class="bg-effects">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-grid"></div>
+  </div>
+
+  <div class="login-wrapper">
+    <!-- Branding -->
+    <div class="branding">
+      <div class="logo-icon">
+        <mat-icon>verified_user</mat-icon>
+      </div>
+      <h1 class="app-title">MployCheck</h1>
+      <p class="app-subtitle">Employee Management System</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+      <div class="card-header">
+        <h2>Welcome Back</h2>
+        <p>Sign in to your account to continue</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="login()" class="login-form">
+        <div class="form-group">
+          <label class="form-label">User ID</label>
+          <div class="input-wrapper">
+            <mat-icon class="input-icon">person</mat-icon>
+            <input
+              type="text"
+              formControlName="username"
+              placeholder="Enter your username"
+              class="custom-input"
+              id="login-username"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrapper">
+            <mat-icon class="input-icon">lock</mat-icon>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Enter your password"
+              class="custom-input"
+              id="login-password"
+            />
+            <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" id="toggle-password-btn">
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="login-btn"
+          [disabled]="loading || form.invalid"
+          id="login-submit-btn"
+        >
+          <span *ngIf="!loading" class="btn-content">
+            <mat-icon>login</mat-icon>
+            Sign In
+          </span>
+          <span *ngIf="loading" class="btn-content btn-loading">
+            <div class="btn-spinner"></div>
+            Authenticating...
+          </span>
+        </button>
+      </form>
+
+      <div class="credentials-hint">
+        <div class="hint-header">
+          <mat-icon>info</mat-icon>
+          <span>Demo Credentials</span>
+        </div>
+        <div class="hint-grid">
+          <div class="hint-item">
+            <span class="hint-role admin-badge">Admin</span>
+            <span class="hint-creds">admin / admin123</span>
+          </div>
+          <div class="hint-item">
+            <span class="hint-role user-badge">User</span>
+            <span class="hint-creds">ravi / ravi123</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer-text">Secure authentication with JWT &bull; Role-based access control</p>
+  </div>
+</div>
